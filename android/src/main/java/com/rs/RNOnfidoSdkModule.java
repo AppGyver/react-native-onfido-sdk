@@ -1,4 +1,4 @@
-package com.reactlibrary;
+package com.rs;
 
 import android.app.Activity;
 import android.content.Intent;

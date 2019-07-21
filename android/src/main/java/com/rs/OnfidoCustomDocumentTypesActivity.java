@@ -1,4 +1,4 @@
-package com.reactlibrary;
+package com.rs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.util.ArrayUtils;
 
-import static com.reactlibrary.RNOnfidoSdkModule.REQUEST_CODE_DOCUMENT_TYPE;
+import static com.rs.RNOnfidoSdkModule.REQUEST_CODE_DOCUMENT_TYPE;
 
 
 public class OnfidoCustomDocumentTypesActivity extends AppCompatActivity {
