@@ -44,5 +44,5 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.onfido.sdk.capture:onfido-capture-sdk:+'
+    implementation 'com.onfido.sdk.capture:onfido-capture-sdk-core:4.10.0'
 }
