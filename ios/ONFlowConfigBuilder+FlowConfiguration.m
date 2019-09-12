@@ -15,20 +15,20 @@
     NSString *token = dictionary[@"token"];
     NSString *applicantId = dictionary[@"applicantId"];
     id documentTypes = dictionary[@"documentTypes"];
-    
+
     NSString *message;
     if (!token) {
         message = @"No token specified";
     }
-    
+
     if (!applicantId) {
         message = @"No applicantId specified";
     }
-    
+
     if (documentTypes && ![documentTypes isKindOfClass:[NSArray class]]) {
         message = @"invalid documentTypes type";
     }
-    
+
     if (message) {
         return [NSError errorWithDomain:@"invalid_params"
                                    code:100
@@ -36,18 +36,19 @@
                                           NSLocalizedDescriptionKey: message
                                           }];
     }
-    
+
     return nil;
 }
-    
+
 + (void)create:(id)json successCallback:(successCallback)successCallback errorCallback: (errorCallback)errorCallback {
     NSError *paramsError = [self validateParams:json];
     if (paramsError) {
         return errorCallback(paramsError);
     }
-    
+
     NSDictionary *dictionary = [RCTConvert NSDictionary:json];
     NSString *token = dictionary[@"token"];
+    NSString *locale = dictionary[@"locale"];
     NSString *applicantId = dictionary[@"applicantId"];
     NSArray *documentTypes =dictionary[@"documentTypes"];
 
@@ -60,11 +61,23 @@
         [configBuilder withDocumentStep];
     }
 
-    [configBuilder withFaceStepOfVariant:ONFaceStepVariantPhoto];
-    
+    NSError *variantConfigError = NULL;
+    Builder *variantBuilder = [ONFaceStepVariantConfig builder];
+    [variantBuilder withPhotoCaptureWithConfig: NULL];
+    [configBuilder withFaceStepOfVariant: [variantBuilder buildAndReturnError: &variantConfigError]];
+
+    if (locale != NULL) {
+        NSString *localeString = [NSString stringWithFormat:@"onfido_translations_%@", locale];
+        [configBuilder withCustomLocalizationWithTableName:localeString];
+    }
+
+    if (variantConfigError != NULL) {
+        return errorCallback(variantConfigError);
+    }
+
     NSError *configError = NULL;
     ONFlowConfig *config = [configBuilder buildAndReturnError:&configError];
-    
+
     if (configError == NULL) {
         successCallback(config);
     } else {

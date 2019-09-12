@@ -23,14 +23,15 @@ import com.onfido.api.client.data.Applicant;
 import com.onfido.android.sdk.capture.upload.Captures;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
-
   private static final String E_ACTIVITY_DOES_NOT_EXIST = "E_ACTIVITY_DOES_NOT_EXIST";
   private static final String E_FAILED_TO_SHOW_ONFIDO = "E_FAILED_TO_SHOW_ONFIDO";
   private final Onfido client;
@@ -98,10 +99,11 @@ public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
     String token = (String) params.get("token");
     String applicantId = (String) params.get("applicantId");
     Boolean withWelcomeScreen = (Boolean) params.get("withWelcomeScreen");
+    String localeString = params.get("locale") != null ? (String) params.get("locale") : "en";
+    Locale locale = new Locale(localeString);
 
     if (this.isDefaultFlow(params)) {
       FlowStep[] defaultSteps = new FlowStep[]{
-              FlowStep.WELCOME,
               FlowStep.CAPTURE_DOCUMENT,
               FlowStep.CAPTURE_FACE,
               FlowStep.FINAL
@@ -111,6 +113,7 @@ public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
               .withCustomFlow(defaultSteps)
               .withApplicant(applicantId)
               .withToken(token)
+              .withLocale(locale)
               .build();
     } else if (documentTypes.size() == 1) {
       try {
@@ -124,6 +127,7 @@ public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
                 .withCustomFlow(steps)
                 .withApplicant(applicantId)
                 .withToken(token)
+                .withLocale(locale)
                 .build();
       }
       catch (Exception e) {
