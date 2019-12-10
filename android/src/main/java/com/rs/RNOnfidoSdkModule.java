@@ -34,6 +34,7 @@ import java.util.Map;
 public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
   private static final String E_ACTIVITY_DOES_NOT_EXIST = "E_ACTIVITY_DOES_NOT_EXIST";
   private static final String E_FAILED_TO_SHOW_ONFIDO = "E_FAILED_TO_SHOW_ONFIDO";
+  private static final String E_USER_CANCELED = "EUSER_CANCELED101";
   private final Onfido client;
   private Callback mSuccessCallback;
   private Callback mErrorCallback;
@@ -54,7 +55,7 @@ public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
 
           @Override
           public void userExited(ExitCode exitCode, Applicant applicant) {
-            mErrorCallback.invoke(exitCode.toString());
+            mErrorCallback.invoke(E_USER_CANCELED);
           }
 
           @Override
