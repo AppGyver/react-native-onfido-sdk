@@ -16,7 +16,7 @@
 @end
 
 @implementation RNOnfidoSdk
-    
+
 RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport
@@ -30,7 +30,7 @@ RCT_EXPORT_MODULE();
                  };
     };
 
-    
+
 RCT_EXPORT_METHOD(startSDK:(id)json successCallback:(RCTResponseSenderBlock)successCallback errorCallback:(RCTResponseErrorBlock)errorCallback) {
     RNOnfidoSdk *sdk = [[RNOnfidoSdk alloc] initWithParams:json successCallback:successCallback errorCallback:errorCallback];
     [sdk run];
@@ -58,7 +58,7 @@ RCT_EXPORT_METHOD(startSDK:(id)json successCallback:(RCTResponseSenderBlock)succ
         // Get view controller on which to present the flow
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         self->_rootViewController = (UIViewController *)window.rootViewController;
-        
+
         NSDictionary *dictionary = [RCTConvert NSDictionary:self->_params];
         @try {
             NSArray *documentTypes = dictionary[@"documentTypes"];
@@ -116,7 +116,7 @@ RCT_EXPORT_METHOD(startSDK:(id)json successCallback:(RCTResponseSenderBlock)succ
         } else if (response.userCanceled) {
 
             // Flow was canceled by the user
-            //      [self handleUserFlowCancelation];
+           [self handleUserFlowCancelation];
 
         } else if (response.results) {
 
@@ -152,8 +152,7 @@ RCT_EXPORT_METHOD(startSDK:(id)json successCallback:(RCTResponseSenderBlock)succ
 }
 
 - (void) handleUserFlowCancelation {
-
-    [_rootViewController presentViewController:[self createUserCanceledPopup] animated:YES completion:NULL];
+    _errorCallback([NSError errorWithDomain:@"user_canceled" code:101 userInfo:nil]);
 }
 
 - (UIAlertController *)createErrorPopupWithMessage: (NSString *) errorMessage {

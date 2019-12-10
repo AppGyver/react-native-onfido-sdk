@@ -59,7 +59,7 @@ public class RNOnfidoSdkModule extends ReactContextBaseJavaModule {
 
           @Override
           public void onError(OnfidoException exception, @Nullable Applicant applicant) {
-            // An exception occurred during the flow
+            mErrorCallback.invoke(exception.getMessage());
           }
         });
       }
